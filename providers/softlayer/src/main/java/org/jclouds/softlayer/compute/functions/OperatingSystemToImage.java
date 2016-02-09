@@ -36,6 +36,7 @@ import org.jclouds.softlayer.domain.SoftwareLicense;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 
 @Singleton
 public class OperatingSystemToImage implements Function<OperatingSystem, Image> {
@@ -83,7 +84,7 @@ public class OperatingSystemToImage implements Function<OperatingSystem, Image> 
               .build();
 
       return new ImageBuilder()
-              .ids(optOSReferenceCode.or(operatingSystem.getId()))
+              .ids(fromNullable(Strings.emptyToNull(operatingSystem.getId())).or(optOSReferenceCode.get()))
               .description(optOSReferenceCode.or(UNRECOGNIZED))
               .operatingSystem(os)
               .status(Image.Status.AVAILABLE)
